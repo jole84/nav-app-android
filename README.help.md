@@ -1,0 +1,1 @@
+If Android Studio asks for the Gradle wrapper, choose to let it download the Gradle wrapper and Android SDK components automatically. If you run into build errors, open the SDK Manager in Android Studio and install Android SDK 34 and the latest build tools.

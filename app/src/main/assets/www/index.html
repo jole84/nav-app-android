@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>OpenLayers in WebView - Live Location (fallback)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v7.4.0/ol.css" />
+  <style>
+    html, body, #map { height: 100%; margin: 0; padding: 0; }
+  </style>
+</head>
+<body>
+  <div id="map" class="map"></div>
+  <script src="https://cdn.jsdelivr.net/npm/ol@v7.4.0/dist/ol.js"></script>
+  <script>
+    const raster = new ol.layer.Tile({ source: new ol.source.OSM() });
+
+    const markerStyle = new ol.style.Style({
+      image: new ol.style.Circle({
+        radius: 8,
+        fill: new ol.style.Fill({ color: 'red' }),
+        stroke: new ol.style.Stroke({ color: '#fff', width: 2 })
+      })
+    });
+
+    const marker = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat([0,0])));
+    marker.setStyle(markerStyle);
+
+    const vectorSource = new ol.source.Vector({ features: [marker] });
+    const vectorLayer = new ol.layer.Vector({ source: vectorSource });
+
+    const map = new ol.Map({
+      target: 'map',
+      layers: [raster, vectorLayer],
+      view: new ol.View({ center: ol.proj.fromLonLat([0, 0]), zoom: 2 })
+    });
+
+    window.onLocationUpdate = function(lat, lng) {
+      const coord = ol.proj.fromLonLat([lng, lat]);
+      marker.getGeometry().setCoordinates(coord);
+      map.getView().animate({ center: coord, duration: 500 });
+    };
+
+    function notifyNativeReady() {
+      try {
+        if (window.AndroidBridge && window.AndroidBridge.onWebviewReady) {
+          window.AndroidBridge.onWebviewReady();
+        }
+      } catch (e) { console.warn('bridge not available', e); }
+    }
+
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      notifyNativeReady();
+    } else {
+      window.addEventListener('DOMContentLoaded', notifyNativeReady);
+    }
+  </script>
+</body>
+</html>
