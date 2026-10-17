@@ -76,7 +76,7 @@ class LocationUpdatesService : Service() {
         val builder = NotificationCompat.Builder(this, channelId)
             .setContentTitle("Background location")
             .setContentText(text)
-            .setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(android.R.drawable.ic_menu_mylocation)
             .setOngoing(true)
         return builder.build()
     }

@@ -8,8 +8,8 @@
     <application
         android:allowBackup="true"
         android:label="Nav-App-Android"
-        android:icon="@mipmap/ic_launcher"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:icon="@android:drawable/ic_dialog_map"
+        android:roundIcon="@android:drawable/ic_dialog_map"
         android:supportsRtl="true">
 
         <service
